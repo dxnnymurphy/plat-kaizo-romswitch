@@ -27,6 +27,12 @@ jobs:
             asset_name: plat-kaizo-romswitch-linux-arm64
             use_cross: true
 
+          - os: ubuntu-latest
+            target: aarch64-linux-android
+            artifact_name: plat-kaizo-romswitch
+            asset_name: plat-kaizo-romswitch-android-arm64
+            use_cross: true
+
           - os: macos-latest
             target: x86_64-apple-darwin
             artifact_name: plat-kaizo-romswitch
@@ -65,9 +71,13 @@ jobs:
           fi
         shell: bash
 
+      - name: Prepare release asset
+        run: cp target/${{ matrix.target }}/release/${{ matrix.artifact_name }} target/${{ matrix.target }}/release/${{ matrix.asset_name }}
+        shell: bash
+
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
         with:
-          files: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
+          files: target/${{ matrix.target }}/release/${{ matrix.asset_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
